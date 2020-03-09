@@ -23,4 +23,5 @@ public class CategoriaResource {
 		List<Categoria> list = _service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
+	
 }
