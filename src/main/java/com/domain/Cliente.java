@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.enums.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_cliente")
@@ -42,6 +43,7 @@ public class Cliente implements Serializable {
 	@CollectionTable(name = "tb_telefones")
 	private Set<String> telefones = new HashSet<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private Set<Pedido> pedidos = new HashSet<>();
 
