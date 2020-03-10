@@ -1,5 +1,7 @@
 package com.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +12,20 @@ import com.domain.Cidade;
 import com.domain.Cliente;
 import com.domain.Endereco;
 import com.domain.Estado;
+import com.domain.Pagamento;
+import com.domain.PagamentoComBoleto;
+import com.domain.PagamentoComCartao;
+import com.domain.Pedido;
 import com.domain.Produto;
+import com.enums.EstadoPagamento;
 import com.enums.TipoCliente;
 import com.repositories.CategoriaRepository;
 import com.repositories.CidadeRepository;
 import com.repositories.ClienteRepository;
 import com.repositories.EnderecoRepository;
 import com.repositories.EstadoRepository;
+import com.repositories.PagamentoRepository;
+import com.repositories.PedidoRepository;
 import com.repositories.ProdutoRepository;
 
 @Service
@@ -34,8 +43,12 @@ public class DbService {
 	private ClienteRepository _clienteRepository;
 	@Autowired
 	private EnderecoRepository _enderecoRepository;
+	@Autowired
+	private PedidoRepository _pedidoRepository;
+	@Autowired
+	private PagamentoRepository _pagamentoRepository;
 
-	public void instanciateTestDataBase() {
+	public void instanciateTestDataBase() throws ParseException {
 
 		Categoria cat1 = new Categoria(null, "Informatica");
 		Categoria cat2 = new Categoria(null, "Escritorio");
@@ -77,6 +90,20 @@ public class DbService {
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		_clienteRepository.saveAll(Arrays.asList(cli1));
 		_enderecoRepository.saveAll(Arrays.asList(e1, e2));
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"),
+				null);
+		ped2.setPagamento(pagto2);
+
+		_pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		_pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 
 	}
 }
