@@ -12,6 +12,7 @@ import com.domain.Cidade;
 import com.domain.Cliente;
 import com.domain.Endereco;
 import com.domain.Estado;
+import com.domain.ItemPedido;
 import com.domain.Pagamento;
 import com.domain.PagamentoComBoleto;
 import com.domain.PagamentoComCartao;
@@ -24,6 +25,7 @@ import com.repositories.CidadeRepository;
 import com.repositories.ClienteRepository;
 import com.repositories.EnderecoRepository;
 import com.repositories.EstadoRepository;
+import com.repositories.ItemPedidoRepository;
 import com.repositories.PagamentoRepository;
 import com.repositories.PedidoRepository;
 import com.repositories.ProdutoRepository;
@@ -47,6 +49,8 @@ public class DbService {
 	private PedidoRepository _pedidoRepository;
 	@Autowired
 	private PagamentoRepository _pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository _itemPedidoRepository;
 
 	public void instanciateTestDataBase() throws ParseException {
 
@@ -71,6 +75,8 @@ public class DbService {
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");
 
+		_estadoRepository.saveAll(Arrays.asList(est1, est2));
+
 		Cidade c1 = new Cidade(null, "Uberlandia", est1);
 		Cidade c2 = new Cidade(null, "São Paulo", est2);
 		Cidade c3 = new Cidade(null, "Campinas", est2);
@@ -78,7 +84,6 @@ public class DbService {
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
 
-		_estadoRepository.saveAll(Arrays.asList(est1, est2));
 		_cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 
 		Cliente cli1 = new Cliente(null, "Maria da Silva", "maria@gmail.com", "3637891377", TipoCliente.PESSOA_FISICA);
@@ -104,6 +109,19 @@ public class DbService {
 
 		_pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		_pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+
+		_itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 
 	}
 }
