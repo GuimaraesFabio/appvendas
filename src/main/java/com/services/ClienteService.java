@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -19,6 +20,7 @@ import com.enums.TipoCliente;
 import com.repositories.CidadeRepository;
 import com.repositories.ClienteRepository;
 import com.repositories.EnderecoRepository;
+import com.services.exceptions.DataIntegrityException;
 import com.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -60,6 +62,15 @@ public class ClienteService {
 		Cliente newObj = findById(obj.getId());
 		updateData(newObj, obj);
 		return _repository.save(newObj);
+	}
+	
+	public void delete (Integer id) {
+		findById(id);
+		try {
+			_repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não foi possivel excluir, existem pedidos realcionados com o cliente.");
+		}
 	}
 
 	private void updateData(Cliente newObj, Cliente obj) {
