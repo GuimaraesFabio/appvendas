@@ -2,23 +2,36 @@ package com.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 public class ClienteNewDto implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	@NotEmpty(message = "Preencimento obrigatorio")
+	@Length(min = 5, max = 80, message = "Campo nome deve conter entre 5 a 120 caracteres")
 	private String nome;
+	@NotEmpty(message = "Preencimento obrigatorio")
+	@Email(message = "Email invalido.")
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;
 
+	@NotEmpty(message = "Preencimento obrigatorio")
 	private String logradouro;
 	private String numero;
+	@NotEmpty(message = "Preencimento obrigatorio")
 	private String complemento;
 	private String bairro;
+	@NotEmpty(message = "Preencimento obrigatorio")
 	private String cep;
-
+	@NotEmpty(message = "Preencimento obrigatorio")
 	private String telefone1;
 	private String telefone2;
 	private String telefone3;

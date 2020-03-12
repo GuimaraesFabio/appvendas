@@ -2,6 +2,11 @@ package com.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.domain.Cliente;
 
 public class ClienteDto implements Serializable {
@@ -11,7 +16,11 @@ public class ClienteDto implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	@NotEmpty(message = "Preencimento obrigatorio")
+	@Length(min = 5, max = 80, message = "Campo nome deve conter entre 5 a 120 caracteres")
 	private String nome;
+	@NotEmpty(message = "Preencimento obrigatorio")
+	@Email(message = "Email invalido.")
 	private String email;
 
 	public ClienteDto() {
