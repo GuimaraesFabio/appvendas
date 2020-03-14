@@ -25,4 +25,8 @@ public class PedidoService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
 	}
 
+	public Pedido insert(Pedido obj) {
+		
+		return obj;
+	}
 }
